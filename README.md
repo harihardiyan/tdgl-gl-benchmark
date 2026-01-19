@@ -69,10 +69,13 @@ $$
 \frac{\partial \psi}{\partial t} = -\gamma_\psi \frac{\delta F}{\delta \psi^*}, \qquad \frac{\partial \mathbf{A}}{\partial t} = -\gamma_A \left( \frac{\delta F}{\delta \mathbf{A}} + \mathbf{J}_n \right)
 $$
 
-With the free-energy density:
+The **Ginzburg–Landau free energy density** is given by:
+
 $$
 f = a|\psi|^2 + \frac{1}{2}|\psi|^4 + |(\nabla - i\mathbf{A})\psi|^2 + \kappa^2 (B - H_\text{ext})^2
 $$
+
+Where the normal current $\mathbf{J}_n = -\sigma_n \nabla \mu$.
 
 ---
 
@@ -80,15 +83,19 @@ $$
 
 ```text
 tdgl-gl-benchmark/
-├── tdgl_core/                # Simulation Engine
-│   ├── core.py               # Solver & JIT stepping
-│   ├── observables.py        # Physical metrics
-│   └── utils.py              # Math helpers
-├── notebooks/                # Research Examples
-├── figures/                  # Pre-rendered results
-├── api.md                    # API Documentation
-├── requirements.txt
-└── README.md
+├── tdgl_core/               # Main simulation engine
+│   ├── core.py              # TDGL solver logic
+│   ├── observables.py       # Physical metrics & vortex detection
+│   └── utils.py             # Math & grid helpers
+├── notebooks/               # Interactive Google Colab examples
+├── .gitignore               # Git exclusion rules
+├── README.md                # Project overview
+├── api.md                   # Detailed API documentation
+├── banner.png               # Repository banner image
+├── license                  # MIT License
+├── pyproject.toml           # Build system configuration
+├── requirements.txt         # Project dependencies
+└── setup.py                 # Package installation script
 ```
 
 ---
