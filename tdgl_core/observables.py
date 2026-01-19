@@ -12,6 +12,10 @@ from .core import (
 # ============================================================
 
 def detect_vortices_phase_winding(psi_c: jnp.ndarray) -> jnp.ndarray:
+    """
+    Detect vortices using phase winding around each plaquette.
+    Returns an (ny, nx) integer mask with values in {-1, 0, +1}.
+    """
     phase = jnp.angle(psi_c)
     ny, nx = phase.shape
 
@@ -42,7 +46,10 @@ def radial_profile(psi_abs2: jnp.ndarray,
                    center: tuple,
                    dr: float = 0.1,
                    r_max: float = None):
-
+    """
+    Compute radial profile of |psi|^2 around a vortex center.
+    JAX-safe: uses segment_sum instead of boolean indexing.
+    """
     ny, nx = psi_abs2.shape
     cy, cx = center
 
@@ -87,16 +94,25 @@ def radial_profile(psi_abs2: jnp.ndarray,
 # ============================================================
 
 def gl_profile(r, xi):
+    """Analytic GL vortex profile: |psi|^2 = tanh^2(r / (sqrt(2)*xi))."""
     return jnp.tanh(r / (jnp.sqrt(2) * xi))**2
 
 
 def fit_coherence_length(r, psi_r):
-    def loss_fn(xi):
-        return jnp.mean((gl_profile(r, xi) - psi_r)**2)
+    """
+    Fit coherence length xi using a grid search (JAX-safe).
+    Avoids deprecated jax.scipy.optimize.
+    """
+    xi_vals = jnp.linspace(0.1, 5.0, 400)
 
-    xi0 = 1.0
-    xi_opt = jax.scipy.optimize.minimize(loss_fn, xi0).x
-    return float(xi_opt)
+    def loss(xi):
+        pred = gl_profile(r, xi)
+        return jnp.mean((pred - psi_r)**2)
+
+    losses = jax.vmap(loss)(xi_vals)
+    idx = jnp.argmin(losses)
+
+    return float(xi_vals[idx])
 
 
 # ============================================================
@@ -112,7 +128,10 @@ def relax_for_field(B0,
                     n_mu_iter=80,
                     noise=0.3,
                     seed=0):
-
+    """
+    Relax TDGL system at a given external field B0.
+    Returns state, energy, vortex mask, and observables.
+    """
     key = jax.random.PRNGKey(seed)
     params = init_params_basic(nx=nx, ny=ny, Lx=Lx, Ly=Ly,
                                kappa=kappa, B0=B0, J_ext=0.0)
@@ -152,7 +171,10 @@ def run_H_scan(H_vals,
                dt=0.01,
                n_mu_iter=80,
                noise=0.3):
-
+    """
+    Run TDGL relaxation for multiple external fields H_vals.
+    Returns arrays of energies, indicators, vortex counts, and samples.
+    """
     energies = []
     indicators = []
     vort_pos = []
