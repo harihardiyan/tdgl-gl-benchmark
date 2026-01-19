@@ -15,7 +15,39 @@ This repository provides:
 - A reproducible benchmark pipeline suitable for research, teaching, and publication
 
 ---
+## 🧪 Interactive Notebooks (Google Colab)
 
+You can run these 7 benchmark simulations directly in your browser. Each notebook covers a specific aspect of the TDGL model:
+
+### 1. Single Vortex Dynamics
+Fundamental simulation focusing on the formation and stability of a single vortex core.
+*   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harihardiyan/tdgl-gl-benchmark/blob/main/notebooks/01_single_vortex.ipynb)
+
+### 2. Multi-Vortex State (64×64)
+Observation of vortex lattice formation and equilibrium states on a standard resolution grid.
+*   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harihardiyan/tdgl-gl-benchmark/blob/main/notebooks/Multi%E2%80%91Vortex_State_(64%C3%9764).ipynb)
+
+### 3. Multi-Vortex State (128×128)
+High-resolution simulation for detailed visualization of vortex distribution and interaction patterns.
+*   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harihardiyan/tdgl-gl-benchmark/blob/main/notebooks/Multi%E2%80%91Vortex_128%C3%97128.ipynb)
+
+### 4. H-Scan Observables
+Calculation of physical observables and phase transitions across a range of external magnetic fields ($H$).
+*   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harihardiyan/tdgl-gl-benchmark/blob/main/notebooks/H%E2%80%91Scan_Observables.ipynb)
+
+### 5. Phase Diagram (H vs T)
+Mapping the superconducting-to-normal phase boundary within the magnetic field ($H$) and temperature ($T$) plane.
+*   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harihardiyan/tdgl-gl-benchmark/blob/main/notebooks/Phase_Diagram_(H_vs_T).ipynb)
+
+### 6. Differentiable Inverse Design
+An advanced application using JAX gradients to optimize the magnetic field ($B_0$) for a specific target vortex count.
+*   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harihardiyan/tdgl-gl-benchmark/blob/main/notebooks/Differentiable_Inverse_Design_(Optimize_B0_for_Target_Vortex_Count).ipynb)
+
+### 7. Vortex Drift & Diode Effect
+Simulation of vortex motion driven by bias current and investigation of the superconducting diode effect.
+*   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harihardiyan/tdgl-gl-benchmark/blob/main/notebooks/vortex_drift___diode_effect__tdgl___bias_current.ipynb)
+
+---
 ✨ Key Features
 
 TDGL Core
