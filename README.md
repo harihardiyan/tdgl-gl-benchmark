@@ -204,7 +204,7 @@ tdgl-gl-benchmark/
 │   ├── core.py
 │   ├── observables.py
 │   ├── utils.py
-│   └── init.py
+│   └── __init__.py
 │
 ├── notebooks/
 ├── figures/
