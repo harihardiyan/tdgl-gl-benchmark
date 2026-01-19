@@ -10,7 +10,8 @@
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
   <img src="https://img.shields.io/badge/Hardware-GPU%20%2F%20TPU-orange" alt="Hardware">
 </p>
-
+<a href="https://doi.org/10.5281/zenodo.18301819"><img src="https://zenodo.org/badge/doi/10.5281/zenodo.18301819.svg" alt="DOI"></a>
+</p>
 ---
 A modular, reproducible, and research‑grade implementation of the **Time‑Dependent Ginzburg–Landau (TDGL)** equations for 2D superconductors. Built using **JAX** for high‑performance automatic differentiation, JIT compilation, and seamless GPU/TPU acceleration.
 
@@ -122,7 +123,22 @@ print(f"Vortex count detected: {len(vortices)}")
 ---
 
 ## 📊 Citation
-```text
-Hari, et al. (2025). TDGL Ginzburg–Landau Benchmark Suite (JAX). 
-GitHub: https://github.com/harihardiyan/tdgl-gl-benchmark
+
+If you use this repository or its benchmarks in your academic work, please cite it as follows:
+
+**APA Style:**
+Harihardiyan. (2025). TDGL Ginzburg–Landau Benchmark Suite (JAX) (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.18301819
+
+**BibTeX:**
+```bibtex
+@software{harihardiyan_2025_18301819,
+  author       = {Harihardiyan},
+  title        = {TDGL Ginzburg--Landau Benchmark Suite (JAX)},
+  month        = jan,
+  year         = 2025,
+  publisher    = {Zenodo},
+  version      = {v1.0.0},
+  doi          = {10.5281/zenodo.18301819},
+  url          = {https://doi.org/10.5281/zenodo.18301819}
+}
 ```
