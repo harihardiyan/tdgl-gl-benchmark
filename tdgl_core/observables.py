@@ -1,3 +1,4 @@
+# tdgl_core/observables.py
 
 import jax
 import jax.numpy as jnp
@@ -38,7 +39,7 @@ def detect_vortices_phase_winding(psi_c: jnp.ndarray) -> jnp.ndarray:
 
 
 # ============================================================
-# 2. Radial profile extraction
+# 2. Radial profile (JAX-safe, no boolean indexing)
 # ============================================================
 
 def radial_profile(psi_abs2: jnp.ndarray,
@@ -87,8 +88,9 @@ def radial_profile(psi_abs2: jnp.ndarray,
 
     return bins, profile
 
+
 # ============================================================
-# 3. GL fit for coherence length
+# 3. GL analytic profile + coherence length fit
 # ============================================================
 
 def gl_profile(r, xi):
