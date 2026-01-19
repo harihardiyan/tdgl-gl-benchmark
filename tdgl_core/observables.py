@@ -12,10 +12,6 @@ from .core import (
 # ============================================================
 
 def detect_vortices_phase_winding(psi_c: jnp.ndarray) -> jnp.ndarray:
-    """
-    Detect vortices using phase winding around each plaquette.
-    Returns an (ny, nx) integer mask with values in {-1, 0, +1}.
-    """
     phase = jnp.angle(psi_c)
     ny, nx = phase.shape
 
@@ -39,17 +35,14 @@ def detect_vortices_phase_winding(psi_c: jnp.ndarray) -> jnp.ndarray:
 
 
 # ============================================================
-# 2. Radial profile (JAX-safe, no boolean indexing)
+# 2. Radial profile (JAX-safe, NO BOOLEAN INDEXING)
 # ============================================================
 
 def radial_profile(psi_abs2: jnp.ndarray,
                    center: tuple,
                    dr: float = 0.1,
                    r_max: float = None):
-    """
-    JAX-safe radial profile using segment_sum instead of boolean indexing.
-    This avoids NonConcreteBooleanIndexError inside vmap/jit.
-    """
+
     ny, nx = psi_abs2.shape
     cy, cx = center
 
@@ -58,29 +51,29 @@ def radial_profile(psi_abs2: jnp.ndarray,
     x = jnp.arange(nx)
     Y, X = jnp.meshgrid(y, x, indexing="ij")
 
-    # Radial distance from center
+    # Radial distance
     r = jnp.sqrt((X - cx)**2 + (Y - cy)**2)
 
-    # Maximum radius
+    # Max radius
     if r_max is None:
         r_max = r.max()
 
     # Bin edges
     bins = jnp.arange(0, r_max + dr, dr)
 
-    # Assign each pixel to a radial bin
-    idx = jnp.digitize(r, bins) - 1  # integer bin index
+    # Integer bin index for each pixel
+    idx = jnp.digitize(r, bins) - 1
 
-    # Flatten arrays for segment ops
+    # Flatten for segment ops
     idx_flat = idx.reshape(-1)
     vals_flat = psi_abs2.reshape(-1)
 
     nbins = len(bins)
 
-    # Sum of |psi|^2 per bin
+    # Sum per bin
     sums = jax.ops.segment_sum(vals_flat, idx_flat, nbins)
 
-    # Count of pixels per bin
+    # Count per bin
     counts = jax.ops.segment_sum(jnp.ones_like(vals_flat), idx_flat, nbins)
 
     # Avoid division by zero
@@ -94,17 +87,12 @@ def radial_profile(psi_abs2: jnp.ndarray,
 # ============================================================
 
 def gl_profile(r, xi):
-    """Analytic GL vortex profile: |psi|^2 = tanh^2(r / (sqrt(2)*xi))."""
     return jnp.tanh(r / (jnp.sqrt(2) * xi))**2
 
 
 def fit_coherence_length(r, psi_r):
-    """
-    Fit |psi|^2(r) to GL analytic form to extract coherence length xi.
-    """
     def loss_fn(xi):
-        pred = gl_profile(r, xi)
-        return jnp.mean((pred - psi_r)**2)
+        return jnp.mean((gl_profile(r, xi) - psi_r)**2)
 
     xi0 = 1.0
     xi_opt = jax.scipy.optimize.minimize(loss_fn, xi0).x
@@ -124,10 +112,7 @@ def relax_for_field(B0,
                     n_mu_iter=80,
                     noise=0.3,
                     seed=0):
-    """
-    Relax TDGL system at a given external field B0.
-    Returns state, energy, vortex mask, and observables.
-    """
+
     key = jax.random.PRNGKey(seed)
     params = init_params_basic(nx=nx, ny=ny, Lx=Lx, Ly=Ly,
                                kappa=kappa, B0=B0, J_ext=0.0)
@@ -167,15 +152,11 @@ def run_H_scan(H_vals,
                dt=0.01,
                n_mu_iter=80,
                noise=0.3):
-    """
-    Run TDGL relaxation for multiple external fields H_vals.
-    Returns arrays of energies, indicators, vortex counts, and samples.
-    """
+
     energies = []
     indicators = []
     vort_pos = []
     vort_neg = []
-
     samples = []
 
     for i, B0 in enumerate(H_vals):
@@ -210,21 +191,18 @@ def run_H_scan(H_vals,
 
 
 # ============================================================
-# 5. Polynomial fitting utilities
+# 5. Polynomial fitting
 # ============================================================
 
 def poly_fit(x, y, deg=1):
-    """Least-squares polynomial fit."""
     X = jnp.stack([x**k for k in range(deg + 1)], axis=-1)
     XT = X.T
     A = XT @ X
     b = XT @ y
-    coeffs = jnp.linalg.solve(A, b)
-    return coeffs
+    return jnp.linalg.solve(A, b)
 
 
 def eval_poly(coeffs, x):
-    """Evaluate polynomial with given coefficients."""
     return sum(coeffs[k] * x**k for k in range(len(coeffs)))
 
 
@@ -233,6 +211,5 @@ def eval_poly(coeffs, x):
 # ============================================================
 
 def vortex_density(vort_count, params: Params):
-    """Compute vortex density = count / area."""
     area = params.dx * params.nx * params.dy * params.ny
     return vort_count / area
