@@ -1,10 +1,9 @@
 
 
 TDGL Ginzburg–Landau Benchmark Suite (JAX)
-![License: MIT](LICENSE)
-![Python]()
-![JAX]()
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harihardiyan/tdgl-gl-benchmark/blob/main/notebooks/vortex_drift___diode_effect__tdgl___bias_current.ipynb)
+![Python](https://img.shields.io/badge/Python-3.9+-blue?logo=python&logoColor=white)
+![JAX](https://img.shields.io/badge/JAX-Accelerated-red?logo=google&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 A modular, reproducible, and research‑grade implementation of the time‑dependent Ginzburg–Landau (TDGL) equations for 2D superconductors, built using JAX for high‑performance automatic differentiation, JIT compilation, and GPU/TPU acceleration.
 
