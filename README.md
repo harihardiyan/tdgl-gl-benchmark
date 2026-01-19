@@ -1,5 +1,8 @@
 
 # TDGL Ginzburg–Landau Benchmark Suite (JAX)
+<p align="center">
+  <img src="banner.png" width="100%">
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.9+-blue?logo=python&logoColor=white" alt="Python">
