@@ -46,30 +46,46 @@ def radial_profile(psi_abs2: jnp.ndarray,
                    dr: float = 0.1,
                    r_max: float = None):
     """
-    Compute radial profile of |psi|^2 around a given center.
+    JAX-safe radial profile using segment_sum instead of boolean indexing.
+    This avoids NonConcreteBooleanIndexError inside vmap/jit.
     """
     ny, nx = psi_abs2.shape
     cy, cx = center
 
+    # Coordinate grid
     y = jnp.arange(ny)
     x = jnp.arange(nx)
     Y, X = jnp.meshgrid(y, x, indexing="ij")
 
+    # Radial distance from center
     r = jnp.sqrt((X - cx)**2 + (Y - cy)**2)
 
+    # Maximum radius
     if r_max is None:
         r_max = r.max()
 
+    # Bin edges
     bins = jnp.arange(0, r_max + dr, dr)
-    idx = jnp.digitize(r, bins) - 1
 
-    def bin_mean(i):
-        mask = idx == i
-        return jnp.where(mask.any(), psi_abs2[mask].mean(), 0.0)
+    # Assign each pixel to a radial bin
+    idx = jnp.digitize(r, bins) - 1  # integer bin index
 
-    profile = jax.vmap(bin_mean)(jnp.arange(len(bins)))
+    # Flatten arrays for segment ops
+    idx_flat = idx.reshape(-1)
+    vals_flat = psi_abs2.reshape(-1)
+
+    nbins = len(bins)
+
+    # Sum of |psi|^2 per bin
+    sums = jax.ops.segment_sum(vals_flat, idx_flat, nbins)
+
+    # Count of pixels per bin
+    counts = jax.ops.segment_sum(jnp.ones_like(vals_flat), idx_flat, nbins)
+
+    # Avoid division by zero
+    profile = jnp.where(counts > 0, sums / counts, 0.0)
+
     return bins, profile
-
 
 # ============================================================
 # 3. GL fit for coherence length
