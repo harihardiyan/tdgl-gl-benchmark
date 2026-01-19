@@ -1,4 +1,3 @@
-
 # TDGL Ginzburg–Landau Benchmark Suite (JAX)
 
 <p align="center">
