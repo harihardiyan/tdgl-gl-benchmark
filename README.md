@@ -11,6 +11,7 @@
   <img src="https://img.shields.io/badge/Hardware-GPU%20%2F%20TPU-orange" alt="Hardware">
 </p>
 
+---
 A modular, reproducible, and research‑grade implementation of the **Time‑Dependent Ginzburg–Landau (TDGL)** equations for 2D superconductors. Built using **JAX** for high‑performance automatic differentiation, JIT compilation, and seamless GPU/TPU acceleration.
 
 ---
